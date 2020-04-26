@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <ActionBar title="Dillish Cars"/>
+        <ActionBar title="Dillish Cars 3"/>
         <CarsList />
     </Page>
 

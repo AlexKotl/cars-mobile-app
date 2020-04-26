@@ -4,6 +4,9 @@
   "description": "A native application built with NativeScript-Vue",
   "author": "Alex <slicer256@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "ios": "tns run ios --emulator"
+  },
   "nativescript": {
     "id": "org.nativescript.application",
     "templateVersion": "v2",
