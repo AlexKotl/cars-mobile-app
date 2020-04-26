@@ -1,20 +1,32 @@
 <template>
     <Page>
-        <ActionBar title="Welcome to NativeScript-Vue!"/>
-        <GridLayout columns="*" rows="*">
-            <Label class="message" :text="msg" col="0" row="0"/>
-        </GridLayout>
+        <ActionBar title="Dillish Cars"/>
+        <ScrollView>
+            <StackLayout class="cars-list">
+                <GridLayout v-for="car in cars" columns="100, *" rows="auto, auto" class="cars-list-item">
+                    <Image :src="car.image" stretch="aspectFill" row="0" rowSpan="2" col="0" />
+                    <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" />
+                    <Label :text="car.price" row="1" col="1" />
+                </GridLayout>
+            </StackLayout>
+        </ScrollView>
     </Page>
 </template>
 
 <script >
-  export default {
+export default {
     data() {
-      return {
-        msg: 'Hello World!'
-      }
+        return {
+            cars: [
+                {manufacturer: 'BMW', model: 'Model 1', image: 'https://dillishcars.com/upload/cars_na/20268/20268_300_1.jpg', price: 100000},
+                {manufacturer: 'Volkswagen', model: 'Model 2', image: 'https://dillishcars.com/upload/cars_na/20269/20269_300_1.jpg', price: 100000}
+            ],
+        }
+    },
+    created() {
+
     }
-  }
+}
 </script>
 
 <style scoped>
@@ -23,10 +35,20 @@
         color: #ffffff;
     }
 
-    .message {
-        vertical-align: center;
-        text-align: center;
+    .cars-list {
+        vertical-align: top;
         font-size: 20;
-        color: #333333;
+        margin: 10;
     }
+
+    .cars-list-item {
+        margin-bottom: 10;
+    }
+
+    .cars-list Image {
+        border-radius: 5;
+        margin-right: 7;
+    }
+
+
 </style>
