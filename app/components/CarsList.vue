@@ -2,7 +2,7 @@
     <ScrollView>
         <StackLayout class="cars-list">
             <GridLayout v-for="car in cars" columns="100, *" rows="auto, auto" class="cars-list-item" :key="car.manufacturer+car.model" @tap="goToDetails(car)">
-                <Image :src="car.image" stretch="aspectFill" row="0" rowSpan="2" col="0" />
+                <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="2" col="0" />
                 <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
                 <Label :text="'N$' + car.price" row="1" col="1" />
             </GridLayout>
@@ -13,14 +13,13 @@
 
 <script >
 import CarDetails from './CarDetails';
+import API from '../API';
+
 export default {
     conponents: { CarDetails },
     data() {
         return {
-            cars: [
-                {id: 4232, manufacturer: 'BMW', model: 'Model 1', image: 'https://dillishcars.com/upload/cars_na/20268/20268_300_1.jpg', price: 100000},
-                {id: 4233, manufacturer: 'Volkswagen', model: 'Model 2', image: 'https://dillishcars.com/upload/cars_na/20269/20269_300_1.jpg', price: 100000}
-            ],
+            cars: [],
         }
     },
     methods: {
@@ -35,8 +34,9 @@ export default {
             });
         }
     },
-    created() {
-
+    async created() {
+        const res = await API.get('cars');
+        this.cars = res.data;
     }
 }
 </script>
