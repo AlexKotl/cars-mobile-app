@@ -20,13 +20,8 @@
                 </GridLayout>
 
                 <Label text="More used cars for sale" class="h1" />
-                <FlexboxLayout flexWrap="wrap">
-                    <StackLayout v-for="car in similars" width="50%" class="similar-item">
-                        <Image :src="car.images[0]" stretch="aspectFit" />
-                        <Label :text="car.year + ' ' + car.manufacturer + ' ' + car.model" row="0" col="0"/>
-                        <Label :text="'NAD ' + car.price" row="0" col="0" class='price' />
-                    </StackLayout>
-                </FlexboxLayout>
+                <SimilarCars :id="id" />
+
             </StackLayout>
         </ScrollView>
 
@@ -35,8 +30,12 @@
 
 <script>
 import API from '../API';
+import SimilarCars from './SimilarCars';
+
 export default {
+    //self: this,
     props: ["id", "manufacturer", "model", "price"],
+    components: { SimilarCars },
     data() {
         return {
             isBusy: true,
@@ -44,16 +43,24 @@ export default {
                 specs: [],
                 images: []
             },
-            similars: []
+        }
+    },
+    methods: {
+        goToDetails(car) {
+            this.$navigateTo(CarDetails, {
+                props: {
+                    id: car.id,
+                    manufacturer: car.manufacturer,
+                    model: car.model,
+                    price: car.price,
+                }
+            });
         }
     },
     async created() {
         const res = await API.get('cars/' + this.id);
         this.details = res.data;
         this.isBusy = false;
-
-        const resSimilar = await API.get('cars/' + this.id + '/similars');
-        this.similars = resSimilar.data;
     }
 }
 </script>
