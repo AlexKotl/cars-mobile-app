@@ -1,10 +1,11 @@
 <template>
     <ScrollView>
         <StackLayout class="cars-list">
-            <GridLayout v-for="car in cars" columns="100, *" rows="auto, auto" class="cars-list-item" :key="car.manufacturer+car.model" @tap="goToDetails(car)">
-                <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="2" col="0" />
+            <GridLayout v-for="car in cars" columns="2*, 3*" rows="auto, auto, auto" class="cars-list-item" :key="car.manufacturer+car.model" @tap="goToDetails(car)">
+                <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="3" col="0" />
                 <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
-                <Label :text="'N$' + car.price" row="1" col="1" />
+                <Label :text="car.mileage + ' km'" row="1" col="1" />
+                <Label :text="'N$' + car.price" row="2" col="1" />
             </GridLayout>
         </StackLayout>
     </ScrollView>
@@ -54,7 +55,7 @@ export default {
     }
 
     .cars-list-item {
-        margin-bottom: 10;
+        margin-bottom: 20;
     }
 
     .cars-list-item .title {
@@ -63,7 +64,7 @@ export default {
 
     .cars-list-item Image {
         border-radius: 5;
-        margin-right: 7;
+        margin-right: 12;
     }
 
 
