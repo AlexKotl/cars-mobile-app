@@ -3,7 +3,7 @@
         <StackLayout class="cars-list">
             <GridLayout v-for="car in cars" columns="2*, 3*" rows="auto, auto, auto" class="cars-list-item" :key="car.manufacturer+car.model" @tap="goToDetails(car)">
                 <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="3" col="0" />
-                <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
+                <Label :text="car.manufacturer + ' ' + car.id" row="0" col="1" class="title" />
                 <Label :text="car.mileage + ' km'" row="1" col="1" />
                 <Label :text="'N$' + car.price" row="2" col="1" />
             </GridLayout>
