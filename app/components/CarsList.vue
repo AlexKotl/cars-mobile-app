@@ -2,12 +2,22 @@
     <ScrollView>
         <StackLayout class="cars-list">
             <WrapLayout style="margin-bottom: 20">
-                <Button v-for="manufacturer in getManufacturers" :text="manufacturer" class="filter-button"  />
+                <Button v-for="manufacturer in getManufacturers"
+                    :text="manufacturer"
+                    @tap="filter({ manufacturer: manufacturer })"
+                    class="filter-button"
+                    :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"  />
             </WrapLayout>
-            <GridLayout v-for="car in cars" columns="2*, 3*" rows="auto, auto, auto" class="cars-list-item" :key="car.manufacturer+car.model+car.id" @tap="goToDetails(car)">
-                <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="3" col="0" />
-                <Label :text="car.manufacturer + ' ' + car.id" row="0" col="1" class="title" />
-                <Label :text="car.mileage + ' km'" row="1" col="1" />
+
+            <GridLayout v-for="car in getFilteredCars"
+                columns="2*, 3*" rows="auto, auto, auto"
+                class="cars-list-item"
+                :key="car.manufacturer+car.model+car.id"
+                @tap="goToDetails(car)">
+
+                <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
+                <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
+                <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
                 <Label :text="'N$' + car.price" row="2" col="1" />
             </GridLayout>
         </StackLayout>
@@ -24,13 +34,13 @@ export default {
     conponents: { CarDetails },
     data() {
         return {
-            cars: [],
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers" ]),
+        ...mapGetters([ "getManufacturers", "getFilteredCars", "getFilters" ]),
     },
     methods: {
+        ...mapMutations([ "updateFilters" ]),
         goToDetails(car) {
             this.$navigateTo(CarDetails, {
                 props: {
@@ -40,12 +50,16 @@ export default {
                     price: car.price,
                 }
             });
+        },
+        filter(params = {}) {
+            console.log("setting filter: ", params)
+            this.updateFilters(params);
         }
     },
     async created() {
-        const res = await API.get('cars');
-        this.cars = res.data;
-        console.log('Manus:' + this.getManufacturers);
+        // const res = await API.get('cars');
+        // this.cars = res.data;
+        // console.log('Manus:' + this.getManufacturers);
     }
 }
 </script>
@@ -64,8 +78,12 @@ export default {
         border-radius: 17;
         background-color: white;
         color: black;
-        font-size: 15;
-        font-weight: normal;
+        font-size: 14;
+        font-weight: bold;
+    }
+    .filter-button.selected {
+        background-color: black;
+        color: white;
     }
 
     .cars-list {
