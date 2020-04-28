@@ -34,13 +34,14 @@ export default {
     conponents: { CarDetails },
     data() {
         return {
+            carsData: {} // additional cars data that pulled from API
         }
     },
     computed: {
         ...mapGetters([ "getManufacturers", "getFilteredCars", "getFilters" ]),
     },
     methods: {
-        ...mapMutations([ "updateFilters" ]),
+        ...mapMutations([ "updateFilters", "completeFilteredCars" ]),
         goToDetails(car) {
             this.$navigateTo(CarDetails, {
                 props: {
@@ -52,14 +53,24 @@ export default {
             });
         },
         filter(params = {}) {
-            console.log("setting filter: ", params)
             this.updateFilters(params);
+        },
+        async fetchCars() {
+            this.carsData = {};
+            const ids = this.getFilteredCars.map(item => item.id).join(',');
+            const data = await API.get('cars/ids?ids=' + ids);
+            this.completeFilteredCars(data.data);
         }
     },
     async created() {
-        // const res = await API.get('cars');
-        // this.cars = res.data;
-        // console.log('Manus:' + this.getManufacturers);
+        this.updateFilters({}); // reinit store
+        this.$store.watch(
+            (state, getters) => this.$store.state.filters,
+            (newValue, oldValue) => {
+                this.fetchCars();
+            },
+        );
+
     }
 }
 </script>
