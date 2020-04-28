@@ -19,8 +19,10 @@ export default new Vuex.Store({
         getCars(state) {
             return state.cars;
         },
-        getManufacturers(state) {
-            return ['BMW'];
+        getManufacturers(state, params = {}) {
+            let filtered = state.cars.map(el => el.manufacturer);
+            filtered = filtered.filter((item, index) => filtered.indexOf(item) === index && item != '');
+            return filtered.sort();
         }
     }
 });
