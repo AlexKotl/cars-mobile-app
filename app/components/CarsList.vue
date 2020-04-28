@@ -1,7 +1,10 @@
 <template>
     <ScrollView>
         <StackLayout class="cars-list">
-            <GridLayout v-for="car in cars" columns="2*, 3*" rows="auto, auto, auto" class="cars-list-item" :key="car.manufacturer+car.model" @tap="goToDetails(car)">
+            <WrapLayout style="margin-bottom: 20">
+                <Button v-for="manufacturer in getManufacturers" :text="manufacturer" class="filter-button"  />
+            </WrapLayout>
+            <GridLayout v-for="car in cars" columns="2*, 3*" rows="auto, auto, auto" class="cars-list-item" :key="car.manufacturer+car.model+car.id" @tap="goToDetails(car)">
                 <Image :src="car.images[0]" stretch="aspectFill" row="0" rowSpan="3" col="0" />
                 <Label :text="car.manufacturer + ' ' + car.id" row="0" col="1" class="title" />
                 <Label :text="car.mileage + ' km'" row="1" col="1" />
@@ -51,6 +54,18 @@ export default {
     ActionBar {
         background-color: #53ba82;
         color: #ffffff;
+    }
+
+    .filter-button {
+        border-width: 1;
+        border-color: #ccc;
+        padding: 5 12;
+        margin: 5 3;
+        border-radius: 17;
+        background-color: white;
+        color: black;
+        font-size: 15;
+        font-weight: normal;
     }
 
     .cars-list {
