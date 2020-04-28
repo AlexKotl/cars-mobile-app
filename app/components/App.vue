@@ -8,6 +8,8 @@
 
 <script >
 import CarsList from './CarsList';
+import API from '../API';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
     components: { CarsList },
@@ -16,8 +18,12 @@ export default {
 
         }
     },
-    created() {
-
+    methods: {
+        ...mapMutations([ "updateCars" ])
+    },
+    async created() {
+        const res = await API.get('cars/all');
+        this.updateCars(res.data);
     }
 }
 </script>
