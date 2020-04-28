@@ -13,6 +13,7 @@
 </template>
 
 <script >
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CarDetails from './CarDetails';
 import API from '../API';
 
@@ -22,6 +23,9 @@ export default {
         return {
             cars: [],
         }
+    },
+    computed: {
+        ...mapGetters([ "getManufacturers" ]),
     },
     methods: {
         goToDetails(car) {
@@ -38,6 +42,7 @@ export default {
     async created() {
         const res = await API.get('cars');
         this.cars = res.data;
+        console.log('Manus:' + this.getManufacturers);
     }
 }
 </script>
