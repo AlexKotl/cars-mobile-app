@@ -3,20 +3,15 @@
         <ActionBar title="Dillish Cars"/>
         <ScrollView>
             <StackLayout class="cars-list">
+                <!-- Loading info -->
                 <Label v-if="errorMessage" :text="errorMessage" textWrap="true" class="error-message card with-padding" />
                 <Button v-if="errorMessage" text="Retry" @tap="fetchAll()" class="retry-button" />
-
                 <ActivityIndicator :busy="isBusy" />
 
-                <WrapLayout class="filters-list">
-                    <Button v-for="manufacturer in getManufacturers"
-                        :text="manufacturer"
-                        @tap="filter({ manufacturer: manufacturer })"
-                        class="filter-button"
-                        :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"
-                        :key="'filter_'+manufacturer" />
-                </WrapLayout>
+                <!-- Filters -->
+                <CarsFilters filter_type="manufacturer" :filters="['BMW', 'AUDI']" />
 
+                <!-- Stock -->
                 <StackLayout class="card cars-list-item"
                     v-for="car in getFilteredCars"
                     :key="car.manufacturer+car.model+car.id">
@@ -35,10 +30,11 @@
 <script >
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CarDetails from './CarDetails';
+import CarsFilters from './CarsFilters';
 import API from '../API';
 
 export default {
-    conponents: { CarDetails },
+    components: { CarDetails, CarsFilters },
     data() {
         return {
             errorMessage: false,
