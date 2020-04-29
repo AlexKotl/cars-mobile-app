@@ -22,12 +22,18 @@
                 <ActivityIndicator :busy="isBusy" />
 
                 <StackLayout class="card">
-                    <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]" columns="3*, 4*" rows="auto" class="car-details-specs">
+                    <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]"
+                        :key="'spec_row'+spec_name"
+                        columns="3*, 4*" rows="auto"
+                        class="car-details-specs">
                         <Label :text="spec_name" row="0" col="0" class="spec-name" />
                         <TextView :text="details[spec_name]" row="0" col="1" class="spec-value" editable="false" />
                     </GridLayout>
 
-                    <GridLayout v-for="spec in details.specs" columns="3*, 4*" rows="auto" class="car-details-specs">
+                    <GridLayout v-for="spec in details.specs"
+                        :key="'spec_row2'+spec.name"
+                        columns="3*, 4*" rows="auto" class="car-details-specs">
+
                         <Label :text="spec.name" row="0" col="0" class="spec-name" />
                         <TextView :text="spec.value" row="0" col="1" class="spec-value" editable="false" />
                     </GridLayout>

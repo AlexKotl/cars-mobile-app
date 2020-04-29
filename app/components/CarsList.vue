@@ -6,7 +6,8 @@
                     :text="manufacturer"
                     @tap="filter({ manufacturer: manufacturer })"
                     class="filter-button"
-                    :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"  />
+                    :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"
+                    :key="'filter_'+manufacturer" />
             </WrapLayout>
 
             <StackLayout class="card cars-list-item"
