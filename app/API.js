@@ -10,17 +10,15 @@ export default {
         //const url = "http://api.dillishcars.com/" + action + paramsStr;
         console.log('Calling API:', url);
         try {
+            console.log("FEtHING...")
             const res = await fetch(url);
+            console.log("JSON...")
+            const data = await res.json();
+            console.log("DATA...")
+            return data;
         } catch(e) {
             throw new Error("Failed to fetch " + url);
         }
 
-        try {
-            const data = await res.json();
-
-        } catch(e) {
-            throw new Error("Failed to parse JSON");
-        }
-        return data;
     }
 }

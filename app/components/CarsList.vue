@@ -66,13 +66,17 @@ export default {
         },
         async fetchAll() {
             this.isBusy = true;
+            this.errorMessage = false;
+
             try {
                 const res = await API.get('cars/all');
                 this.updateCars(res.data);
             } catch(e) {
-                this.errorMessage = "Can't get data from server. Please try later...";
+                this.errorMessage = "Can't get data from server. Please try later...\n\n" + e.message;
+            } finally {
+                this.isBusy = false;
             }
-            this.isBusy = false;
+
         },
         async fetchCars() {
             this.carsData = {};
