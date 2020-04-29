@@ -6,12 +6,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         cars: [],
+        carsTimestamp: false,
         filteredCars: [],
         filters: {}
     },
     mutations: {
         updateCars(state, cars) {
             state.cars = cars;
+            state.carsTimestamp = new Date();
         },
         updateFilters(state, filters) {
             state.filters = filters;
@@ -35,5 +37,8 @@ export default new Vuex.Store({
             filtered = filtered.filter((item, index) => filtered.indexOf(item) === index && item != '');
             return filtered.sort();
         },
+        getCarsTimestamp(state) {
+            return state.carsTimestamp;
+        }
     }
 });

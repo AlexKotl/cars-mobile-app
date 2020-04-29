@@ -39,13 +39,13 @@ export default {
     data() {
         return {
             errorMessage: false,
-            isBusy: true,
+            isBusy: false,
             filteredCars: [],
             carsData: {} // additional cars data that pulled from API
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers", "getFilters", "getCars" ]),
+        ...mapGetters([ "getManufacturers", "getFilters", "getCars", "getCarsTimestamp" ]),
         pageTitle: function() {
             return (this.filters && this.filters.manufacturer ? this.filters.manufacturer : "Dillish Cars");
         },
@@ -97,16 +97,18 @@ export default {
     },
     async created() {
         // fetch whole cars database
-        await this.fetchAll();
+        if (!this.getCarsTimestamp) {
+            await this.fetchAll();
+        }
 
         // init filters prop
         if (!this.filters) {
             this.filters = {};
         }
 
-        // format all cars from saved database
+        // filter cars from saved database
         if (Object.keys(this.filters).length == 0) {
-            this.filteredCars = this.getCars.slice(0, 10);
+            this.filteredCars = this.getCars.slice(-10);
         }
         else {
             const filtered = this.getCars.filter(item => {
@@ -146,10 +148,6 @@ export default {
         background-color: white;
         color: black;
         margin-top: 20;
-    }
-
-    CarsFilters {
-        margin-bottom: 20;
     }
 
     .filters-list {
