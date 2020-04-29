@@ -9,15 +9,17 @@
 
                 <ActivityIndicator :busy="isBusy" />
 
-                <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]" columns="3*, 4*" rows="auto" class="car-details-specs">
-                    <Label :text="spec_name" row="0" col="0" class="spec-name" />
-                    <TextView :text="details[spec_name]" row="0" col="1" class="spec-value" editable="false" />
-                </GridLayout>
+                <StackLayout class="card">
+                    <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]" columns="3*, 4*" rows="auto" class="car-details-specs">
+                        <Label :text="spec_name" row="0" col="0" class="spec-name" />
+                        <TextView :text="details[spec_name]" row="0" col="1" class="spec-value" editable="false" />
+                    </GridLayout>
 
-                <GridLayout v-for="spec in details.specs" columns="3*, 4*" rows="auto" class="car-details-specs">
-                    <Label :text="spec.name" row="0" col="0" class="spec-name" />
-                    <TextView :text="spec.value" row="0" col="1" class="spec-value" editable="false" />
-                </GridLayout>
+                    <GridLayout v-for="spec in details.specs" columns="3*, 4*" rows="auto" class="car-details-specs">
+                        <Label :text="spec.name" row="0" col="0" class="spec-name" />
+                        <TextView :text="spec.value" row="0" col="1" class="spec-value" editable="false" />
+                    </GridLayout>
+                </StackLayout>
 
                 <Label text="More used cars for sale" class="h1" />
                 <SimilarCars :id="id" />
@@ -70,6 +72,7 @@ export default {
         font-size: 24;
         font-weight: bold;
         margin: 10 0;
+        color:white;
     }
 
     .car-details {
@@ -94,6 +97,7 @@ export default {
         font-weight: bold;
         vertical-align: top;
         font-size: 14;
+        background-color: transparent;
     }
 
     .similar-item {

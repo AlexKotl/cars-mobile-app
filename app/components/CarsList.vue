@@ -1,7 +1,7 @@
 <template>
     <ScrollView>
         <StackLayout class="cars-list">
-            <WrapLayout style="margin-bottom: 20">
+            <WrapLayout class="filters-list">
                 <Button v-for="manufacturer in getManufacturers"
                     :text="manufacturer"
                     @tap="filter({ manufacturer: manufacturer })"
@@ -9,17 +9,16 @@
                     :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"  />
             </WrapLayout>
 
-            <GridLayout v-for="car in getFilteredCars"
-                columns="2*, 3*" rows="auto, auto, auto"
-                class="cars-list-item"
-                :key="car.manufacturer+car.model+car.id"
-                @tap="goToDetails(car)">
-
-                <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
-                <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
-                <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
-                <Label :text="'N$' + car.price" row="2" col="1" />
-            </GridLayout>
+            <StackLayout class="card cars-list-item"
+                v-for="car in getFilteredCars"
+                :key="car.manufacturer+car.model+car.id">
+                <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
+                    <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
+                    <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
+                    <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
+                    <Label :text="'N$' + car.price" row="2" col="1" />
+                </GridLayout>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 
@@ -76,25 +75,24 @@ export default {
 </script>
 
 <style scoped>
-    ActionBar {
-        background-color: #53ba82;
-        color: #ffffff;
+    .filters-list {
+        margin-bottom: 20;
     }
-
     .filter-button {
         border-width: 1;
         border-color: #ccc;
         padding: 5 12;
         margin: 5 3;
         border-radius: 17;
-        background-color: white;
-        color: black;
+        background-color: black;
+        color: white;
         font-size: 14;
         font-weight: bold;
     }
     .filter-button.selected {
-        background-color: black;
-        color: white;
+        background-color: white;
+        color: black;
+
     }
 
     .cars-list {
@@ -105,6 +103,9 @@ export default {
 
     .cars-list-item {
         margin-bottom: 20;
+        background-color: #fff;
+        border-radius: 15;
+        font-size: 17;
     }
 
     .cars-list-item .title {
