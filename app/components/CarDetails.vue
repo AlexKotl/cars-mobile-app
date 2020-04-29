@@ -3,19 +3,37 @@
         <ActionBar :title="manufacturer + ' ' + model"/>
         <ScrollView>
             <StackLayout class="car-details">
-                <Image :src="details.images[0]" stretch="aspectFill" />
+                <GridLayout>
+                    <Carousel ref="myCarousel" debug="true" height="100%" width="100%" :items="details.images"
+                        indicatorColor="#9b5504"
+                        indicatorColorUnselected="#609b5504"
+                        android:indicatorAnimation="swap">
+                        <CarouselItem v-for="(image, i) in details.images" :key="'car_img_'+i" verticalAlignment="middle">
+                            <GridLayout>
+                                <Image :src="image" stretch="aspectFill"></Image>
+                            </GridLayout>
+                        </CarouselItem>
+                    </Carousel>
+                </GridLayout>
+
 
                 <Label :text="manufacturer + ' ' + model + ' Specifications'" class="h1"></Label>
 
                 <ActivityIndicator :busy="isBusy" />
 
                 <StackLayout class="card">
-                    <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]" columns="3*, 4*" rows="auto" class="car-details-specs">
+                    <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]"
+                        :key="'spec_row'+spec_name"
+                        columns="3*, 4*" rows="auto"
+                        class="car-details-specs">
                         <Label :text="spec_name" row="0" col="0" class="spec-name" />
                         <TextView :text="details[spec_name]" row="0" col="1" class="spec-value" editable="false" />
                     </GridLayout>
 
-                    <GridLayout v-for="spec in details.specs" columns="3*, 4*" rows="auto" class="car-details-specs">
+                    <GridLayout v-for="spec in details.specs"
+                        :key="'spec_row2'+spec.name"
+                        columns="3*, 4*" rows="auto" class="car-details-specs">
+
                         <Label :text="spec.name" row="0" col="0" class="spec-name" />
                         <TextView :text="spec.value" row="0" col="1" class="spec-value" editable="false" />
                     </GridLayout>
@@ -35,7 +53,6 @@ import API from '../API';
 import SimilarCars from './SimilarCars';
 
 export default {
-    //self: this,
     props: ["id", "manufacturer", "model", "price"],
     components: { SimilarCars },
     data() {
@@ -44,7 +61,7 @@ export default {
             details: {
                 specs: [],
                 images: []
-            },
+            }
         }
     },
     methods: {
@@ -62,7 +79,15 @@ export default {
     async created() {
         const res = await API.get('cars/' + this.id);
         this.details = res.data;
+        console.log('images: ',this.details.images.length);
         this.isBusy = false;
+    },
+    watch: {
+        async 'details.images'(to) {
+            await this.$nextTick();
+            console.log('DATA UPDATED')
+            this.$refs.myCarousel.nativeView.refresh();
+        },
     }
 }
 </script>

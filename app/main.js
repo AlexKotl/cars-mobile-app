@@ -4,6 +4,9 @@ import VueDevtools from 'nativescript-vue-devtools'
 
 Vue.config.suppressRenderLogs = true;
 
+Vue.registerElement('Carousel', () => require('nativescript-carousel').Carousel);
+Vue.registerElement('CarouselItem', () => require('nativescript-carousel').CarouselItem);
+
 if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)
 }

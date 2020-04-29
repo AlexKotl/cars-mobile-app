@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         cars: [],
         filteredCars: [],
-        filters: {},
+        filters: {}
     },
     mutations: {
         updateCars(state, cars) {
