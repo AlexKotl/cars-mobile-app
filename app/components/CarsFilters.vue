@@ -2,7 +2,7 @@
     <WrapLayout>
         <Button v-for="filter in filters"
             :text="filter"
-            @tap="goTo()"
+            @tap="goTo({ manufacturer: filter })"
             class="filter-button"
             :key="'filter_'+filter" />
     </WrapLayout>
@@ -19,10 +19,10 @@ export default {
         }
     },
     methods: {
-        goTo() {
+        goTo(filters) {
             this.$navigateTo(CarsList, {
                 props: {
-                    some: 'yes'
+                    filters: filters
                 }
             });
         },

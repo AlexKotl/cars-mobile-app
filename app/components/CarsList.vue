@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <ActionBar title="Dillish Cars"/>
+        <ActionBar :title="pageTitle"/>
         <ScrollView>
             <StackLayout class="cars-list">
                 <!-- Loading info -->
@@ -9,11 +9,11 @@
                 <ActivityIndicator :busy="isBusy" />
 
                 <!-- Filters -->
-                <CarsFilters filter_type="manufacturer" :filters="['BMW', 'AUDI']" />
+                <CarsFilters v-if="!filters || !filters.manufacturer" filter_type="manufacturer" :filters="getManufacturers" />
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
-                    v-for="car in getFilteredCars"
+                    v-for="car in filteredCars"
                     :key="car.manufacturer+car.model+car.id">
                     <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
                         <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
@@ -34,19 +34,24 @@ import CarsFilters from './CarsFilters';
 import API from '../API';
 
 export default {
+    props: ["filters"],
     components: { CarDetails, CarsFilters },
     data() {
         return {
             errorMessage: false,
             isBusy: true,
+            filteredCars: [],
             carsData: {} // additional cars data that pulled from API
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers", "getFilteredCars", "getFilters" ]),
+        ...mapGetters([ "getManufacturers", "getFilters", "getCars" ]),
+        pageTitle: function() {
+            return (this.filters && this.filters.manufacturer ? this.filters.manufacturer : "Dillish Cars");
+        },
     },
     methods: {
-        ...mapMutations([ "updateFilters", "completeFilteredCars", "updateCars" ]),
+        ...mapMutations([ "updateFilters", "updateCars" ]),
         goToDetails(car) {
             this.$navigateTo(CarDetails, {
                 props: {
@@ -56,9 +61,6 @@ export default {
                     price: car.price,
                 }
             });
-        },
-        filter(params = {}) {
-            this.updateFilters(params);
         },
         async fetchAll() {
             this.isBusy = true;
@@ -74,26 +76,62 @@ export default {
             }
 
         },
-        async fetchCars() {
-            this.carsData = {};
-            const ids = this.getFilteredCars.map(item => item.id).join(',');
-            const data = await API.get('cars/ids?ids=' + ids);
-            this.completeFilteredCars(data.data);
+        completeFilteredCars(state, data) {
+            let additional = {};
+            data.forEach(item => {
+                additional[item.id] = item;
+            });
+
+            const completed = state.filteredCars.map(item => {
+                if (additional[item.id]) {
+                    item.images = additional[item.id].images;
+                    item.mileage = additional[item.id].mileage;
+                }
+
+                return item;
+            });
+
+            state.filteredCars = completed;
         }
 
     },
-    created() {
-        this.$store.watch(
-            (state, getters) => this.$store.state.filters,
-            (newValue, oldValue) => {
-                this.fetchCars();
-            },
-        );
-
+    async created() {
         // fetch whole cars database
-        this.fetchAll();
+        await this.fetchAll();
 
-        this.updateFilters({ refresh: true }); // reinit store
+        // init filters prop
+        if (!this.filters) {
+            this.filters = {};
+        }
+
+        // format all cars from saved database
+        if (Object.keys(this.filters).length == 0) {
+            this.filteredCars = this.getCars.slice(0, 10);
+        }
+        else {
+            const filtered = this.getCars.filter(item => {
+                return (!this.filters.manufacturer || this.filters.manufacturer === item.manufacturer);
+            });
+            this.filteredCars = filtered.slice(0, 20); // return with pagination TODO
+        }
+
+        // fetch additional car data from API
+        const ids = this.filteredCars.map(item => item.id).join(',');
+        const data = await API.get('cars/ids?ids=' + ids);
+
+        let additional = {};
+        data.data.forEach(item => {
+            additional[item.id] = item;
+        });
+
+        this.filteredCars = this.filteredCars.map(item => {
+            if (additional[item.id]) {
+                item.images = additional[item.id].images;
+                item.mileage = additional[item.id].mileage;
+            }
+            return item;
+        });
+
     }
 }
 </script>
@@ -108,6 +146,10 @@ export default {
         background-color: white;
         color: black;
         margin-top: 20;
+    }
+
+    CarsFilters {
+        margin-bottom: 20;
     }
 
     .filters-list {

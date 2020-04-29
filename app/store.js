@@ -15,34 +15,7 @@ export default new Vuex.Store({
         },
         updateFilters(state, filters) {
             state.filters = filters;
-
-            if (Object.keys(state.filters).length == 0) {
-                state.filteredCars = state.cars.slice(0, 10);
-            }
-            else {
-                const filtered = state.cars.filter(item => {
-                    return (state.filters.manufacturer === undefined || state.filters.manufacturer === item.manufacturer);
-                });
-                state.filteredCars = filtered.slice(0, 20); // return with pagination
-            }
         },
-        completeFilteredCars(state, data) {
-            let additional = {};
-            data.forEach(item => {
-                additional[item.id] = item;
-            });
-
-            const completed = state.filteredCars.map(item => {
-                if (additional[item.id]) {
-                    item.images = additional[item.id].images;
-                    item.mileage = additional[item.id].mileage;
-                }
-
-                return item;
-            });
-
-            state.filteredCars = completed;
-        }
     },
     actions: {
 
