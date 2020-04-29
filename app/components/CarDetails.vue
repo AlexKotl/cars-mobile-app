@@ -3,6 +3,19 @@
         <ActionBar :title="manufacturer + ' ' + model"/>
         <ScrollView>
             <StackLayout class="car-details">
+                <GridLayout height="300">
+                      <Carousel ref="myCarousel" debug="true" height="100%" width="100%" :items="myData" colow="white"
+                         indicatorColor="#9b5504" indicatorColorUnselected="#609b5504"
+                        ios:autoPagingInterval="3" android:indicatorAnimation="swap">
+                        <CarouselItem v-for="(item, i) in myData" :key="i" verticalAlignment="middle" :backgroundColor="item.color">
+                            <GridLayout>
+                                <Image :src="item.image" stretch="aspectFill"></Image>
+                                <Label :text="item.title" horizontalAlignment="center" backgroundColor="#50000000" height="30"></Label>
+                            </GridLayout>
+                        </CarouselItem>
+                      </Carousel>
+                  </GridLayout>
+
                 <Image :src="details.images[0]" stretch="aspectFill" />
 
                 <Label :text="manufacturer + ' ' + model + ' Specifications'" class="h1"></Label>
@@ -33,11 +46,12 @@
 <script>
 import API from '../API';
 import SimilarCars from './SimilarCars';
+import { Carousel, CarouselItem } from 'nativescript-carousel';
 
 export default {
     //self: this,
     props: ["id", "manufacturer", "model", "price"],
-    components: { SimilarCars },
+    components: { SimilarCars, Carousel, CarouselItem },
     data() {
         return {
             isBusy: true,
@@ -45,6 +59,10 @@ export default {
                 specs: [],
                 images: []
             },
+            myData: [{ title: 'Slide 1', color: '#b3cde0', image: 'https://dillishcars.com/img.php?file=23892/23892_1.jpg' },
+                  { title: 'Slide 2', color: '#6497b1', image: 'https://dillishcars.com/img.php?file=23892/23892_1.jpg' },
+                  { title: 'Slide 3', color: '#005b96', image: 'https://dillishcars.com/img.php?file=23892/23892_1.jpg' },
+                  { title: 'Slide 4', color: '#03396c', image: 'https://dillishcars.com/img.php?file=23892/23892_1.jpg' }],
         }
     },
     methods: {
@@ -63,6 +81,12 @@ export default {
         const res = await API.get('cars/' + this.id);
         this.details = res.data;
         this.isBusy = false;
+    },
+    watch: {
+        async myData(to) {
+            await this.$nextTick()
+            this.$refs.myCarousel.nativeView.refresh();
+        },
     }
 }
 </script>
