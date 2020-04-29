@@ -1,33 +1,35 @@
 <template>
-    <ScrollView>
-        <StackLayout class="cars-list">
-            <Label v-if="errorMessage" :text="errorMessage" class="error-message card with-padding" />
-            <Button v-if="errorMessage" text="Retry" @tap="fetchCars()" class="retry-button" />
+    <Page>
+        <ActionBar title="Dillish Cars"/>
+        <ScrollView>
+            <StackLayout class="cars-list">
+                <Label v-if="errorMessage" :text="errorMessage" textWrap="true" class="error-message card with-padding" />
+                <Button v-if="errorMessage" text="Retry" @tap="fetchAll()" class="retry-button" />
 
-            <ActivityIndicator :busy="isBusy" />
+                <ActivityIndicator :busy="isBusy" />
 
-            <WrapLayout class="filters-list">
-                <Button v-for="manufacturer in getManufacturers"
-                    :text="manufacturer"
-                    @tap="filter({ manufacturer: manufacturer })"
-                    class="filter-button"
-                    :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"
-                    :key="'filter_'+manufacturer" />
-            </WrapLayout>
+                <WrapLayout class="filters-list">
+                    <Button v-for="manufacturer in getManufacturers"
+                        :text="manufacturer"
+                        @tap="filter({ manufacturer: manufacturer })"
+                        class="filter-button"
+                        :class="{ selected: getFilters.manufacturer !== undefined && getFilters.manufacturer === manufacturer }"
+                        :key="'filter_'+manufacturer" />
+                </WrapLayout>
 
-            <StackLayout class="card cars-list-item"
-                v-for="car in getFilteredCars"
-                :key="car.manufacturer+car.model+car.id">
-                <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
-                    <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
-                    <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
-                    <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
-                    <Label :text="'N$' + car.price" row="2" col="1" />
-                </GridLayout>
+                <StackLayout class="card cars-list-item"
+                    v-for="car in getFilteredCars"
+                    :key="car.manufacturer+car.model+car.id">
+                    <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
+                        <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
+                        <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
+                        <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
+                        <Label :text="'N$' + car.price" row="2" col="1" />
+                    </GridLayout>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
-    </ScrollView>
-
+        </ScrollView>
+    </Page>
 </template>
 
 <script >
@@ -48,7 +50,7 @@ export default {
         ...mapGetters([ "getManufacturers", "getFilteredCars", "getFilters" ]),
     },
     methods: {
-        ...mapMutations([ "updateFilters", "completeFilteredCars" ]),
+        ...mapMutations([ "updateFilters", "completeFilteredCars", "updateCars" ]),
         goToDetails(car) {
             this.$navigateTo(CarDetails, {
                 props: {
@@ -62,20 +64,25 @@ export default {
         filter(params = {}) {
             this.updateFilters(params);
         },
-        async fetchCars() {
-            this.carsData = {};
+        async fetchAll() {
             this.isBusy = true;
-            const ids = this.getFilteredCars.map(item => item.id).join(',');
             try {
-                const data = await API.get('cars/ids?ids=' + ids);
-                this.completeFilteredCars(data.data);
+                const res = await API.get('cars/all');
+                this.updateCars(res.data);
             } catch(e) {
                 this.errorMessage = "Can't get data from server. Please try later...";
             }
             this.isBusy = false;
+        },
+        async fetchCars() {
+            this.carsData = {};
+            const ids = this.getFilteredCars.map(item => item.id).join(',');
+            const data = await API.get('cars/ids?ids=' + ids);
+            this.completeFilteredCars(data.data);
         }
+
     },
-    async created() {
+    created() {
         this.$store.watch(
             (state, getters) => this.$store.state.filters,
             (newValue, oldValue) => {
@@ -83,8 +90,10 @@ export default {
             },
         );
 
-        this.updateFilters({ refresh: true }); // reinit store
+        // fetch whole cars database
+        this.fetchAll();
 
+        this.updateFilters({ refresh: true }); // reinit store
     }
 }
 </script>

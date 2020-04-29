@@ -1,5 +1,5 @@
 import Vue from 'nativescript-vue'
-import App from './components/App'
+import CarsList from './components/CarsList'
 import VueDevtools from 'nativescript-vue-devtools'
 
 Vue.config.suppressRenderLogs = true;
@@ -18,5 +18,5 @@ Vue.config.silent = (TNS_ENV === 'production')
 
 new Vue({
     store,
-    render: h => h('frame', [h(App)])
+    render: h => h('frame', [h(CarsList)])
 }).$start()
