@@ -17,7 +17,7 @@ import CarDetails from './CarDetails';
 
 export default {
     props: ["id"],
-    conponents: { CarDetails },
+    components: { CarDetails },
     data() {
         return {
             similars: []

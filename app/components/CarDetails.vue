@@ -20,7 +20,7 @@
                 <Label :text="manufacturer + ' ' + model + ' Specifications'" class="h1"></Label>
 
                 <ActivityIndicator :busy="isBusy" />
-                
+
 
                 <StackLayout class="card">
                     <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]"
@@ -40,7 +40,7 @@
                     </GridLayout>
                 </StackLayout>
 
-                <Label text="More used cars for sale" class="h1" />
+                <Label text="More used cars for sale" class="h1" style="margin-top: 20"/>
                 <SimilarCars :id="id" />
 
             </StackLayout>
@@ -80,7 +80,6 @@ export default {
     async created() {
         const res = await API.get('cars/' + this.id);
         this.details = res.data;
-        console.log('images: ',this.details.images.length);
         this.isBusy = false;
     },
     watch: {
