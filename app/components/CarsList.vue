@@ -62,13 +62,14 @@ export default {
         }
     },
     async created() {
-        this.updateFilters({}); // reinit store
         this.$store.watch(
             (state, getters) => this.$store.state.filters,
             (newValue, oldValue) => {
                 this.fetchCars();
             },
         );
+
+        this.updateFilters({ refresh: true }); // reinit store
 
     }
 }
