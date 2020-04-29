@@ -20,6 +20,7 @@
                 <Label :text="manufacturer + ' ' + model + ' Specifications'" class="h1"></Label>
 
                 <ActivityIndicator :busy="isBusy" />
+                
 
                 <StackLayout class="card">
                     <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]"
@@ -129,6 +130,7 @@ export default {
         text-align: center;
         font-size: 14;
         padding: 0 7 20 7;
+        box-sizing: border-box;
     }
     .similar-item Image {
         border-radius: 4;

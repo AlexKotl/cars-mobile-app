@@ -1,6 +1,11 @@
 <template>
     <ScrollView>
         <StackLayout class="cars-list">
+            <Label v-if="errorMessage" :text="errorMessage" class="error-message card with-padding" />
+            <Button v-if="errorMessage" text="Retry" @tap="fetchCars()" class="retry-button" />
+
+            <ActivityIndicator :busy="isBusy" />
+
             <WrapLayout class="filters-list">
                 <Button v-for="manufacturer in getManufacturers"
                     :text="manufacturer"
@@ -34,6 +39,8 @@ export default {
     conponents: { CarDetails },
     data() {
         return {
+            errorMessage: false,
+            isBusy: true,
             carsData: {} // additional cars data that pulled from API
         }
     },
@@ -57,9 +64,15 @@ export default {
         },
         async fetchCars() {
             this.carsData = {};
+            this.isBusy = true;
             const ids = this.getFilteredCars.map(item => item.id).join(',');
-            const data = await API.get('cars/ids?ids=' + ids);
-            this.completeFilteredCars(data.data);
+            try {
+                const data = await API.get('cars/ids?ids=' + ids);
+                this.completeFilteredCars(data.data);
+            } catch(e) {
+                this.errorMessage = "Can't get data from server. Please try later...";
+            }
+            this.isBusy = false;
         }
     },
     async created() {
@@ -77,6 +90,17 @@ export default {
 </script>
 
 <style scoped>
+    .error-message {
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+    .retry-button {
+        background-color: white;
+        color: black;
+        margin-top: 20;
+    }
+
     .filters-list {
         margin-bottom: 20;
     }
