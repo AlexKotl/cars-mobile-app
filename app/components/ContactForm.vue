@@ -1,13 +1,15 @@
 <template>
     <StackLayout class="contact-form card">
-        <Label :text="errorMessage" v-if="errorMessage" class='error-message' />
-        <Label :text="successMessage" v-if="successMessage" class='success-message' />
+        <Label :text="errorMessage" v-if="errorMessage" class='error-message' textWrap="true" />
+        <Label :text="successMessage" v-if="successMessage" class='success-message' textWrap="true" />
 
-        <TextField hint="Your name" editable="true" :text="name" />
-        <TextField hint="Your phone or email" :text="reply_to" />
-        <TextView hint="Enter your message here..." :text="message" />
-        <ActivityIndicator :busy="isBusy" />
-        <Button text="Submit" v-if="!isBusy" @tap="submitLead()" />
+        <StackLayout v-if="!isSent">
+            <TextField hint="Your name" editable="true" v-model="name" />
+            <TextField hint="Your phone or email" v-model="reply_to" />
+            <TextView hint="Enter your message here..." v-model="message" />
+            <ActivityIndicator :busy="isBusy" />
+            <Button text="Submit" v-if="!isBusy" @tap="submitLead()" />
+        </StackLayout>
     </StackLayout>
 </template>
 
@@ -30,18 +32,29 @@ export default {
     methods: {
         async submitLead() {
             this.isBusy = true;
+            this.successMessage = this.errorMessage = false;
+
             try {
-                res = await API.post("cars/" + this.id + "/contact", {
+                const res = await API.post("cars/" + this.id + "/contact", {
                     name: this.name,
                     reply_to: this.reply_to,
                     message: this.message
                 });
+
+                if (res.errors) {
+                    this.errorMessage = Object.values(res.errors).join("\n\n");
+                }
+                else {
+                    this.successMessage = "Your message was sent!";
+                    this.isSent = true;
+                }
+
             } catch(e) {
-                this.errorMessage = "Failed to submit lead. Please try later...";
+                this.errorMessage = "Failed to submit lead. Please try later... " + e;
             } finally {
                 this.isBusy = false;
             }
-            this.successMessage = "Your message was sent!";
+
 
         }
     }
