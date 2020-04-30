@@ -22,7 +22,7 @@
                 <ActivityIndicator :busy="isBusy" />
 
 
-                <StackLayout class="card">
+                <StackLayout class="">
                     <GridLayout v-for="spec_name in ['price', 'body', 'year', 'mileage',]"
                         :key="'spec_row'+spec_name"
                         columns="3*, 4*" rows="auto"
@@ -40,6 +40,9 @@
                     </GridLayout>
                 </StackLayout>
 
+                <Label text="Contact the Seller" class="h1" style="margin-top: 20"/>
+                <ContactForm :id="id" />
+
                 <Label text="More used cars for sale" class="h1" style="margin-top: 20"/>
                 <SimilarCars :id="id" />
 
@@ -52,10 +55,11 @@
 <script>
 import API from '../API';
 import SimilarCars from './SimilarCars';
+import ContactForm from './ContactForm';
 
 export default {
     props: ["id", "manufacturer", "model", "price"],
-    components: { SimilarCars },
+    components: { SimilarCars, ContactForm },
     data() {
         return {
             isBusy: true,
@@ -96,7 +100,8 @@ export default {
     .h1 {
         font-size: 24;
         font-weight: bold;
-        margin: 10 0;
+        margin-top: 20;
+        margin-bottom: 10;
         color:white;
     }
 

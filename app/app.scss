@@ -19,3 +19,16 @@ ActionBar {
 .card.with-padding {
     padding: 5 10;
 }
+
+.success-message, .error-message {
+    padding: 15 10;
+    margin: 10 0;
+    border-radius: 10;
+    background-color: #53ba82;
+    color: white;
+    text-align: center;
+
+}
+.error-message {
+    background-color: #c45656;
+}
