@@ -101,6 +101,7 @@ export default {
         font-size: 24;
         font-weight: bold;
         margin-top: 20;
+        margin-bottom: 10;
         color:white;
     }
 
