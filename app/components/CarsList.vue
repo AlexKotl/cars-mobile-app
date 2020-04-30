@@ -70,7 +70,7 @@ export default {
                 const res = await API.get('cars/all');
                 this.updateCars(res.data);
             } catch(e) {
-                this.errorMessage = "Can't get data from server. Please try later...\n\n" + e.message;
+                this.errorMessage = "Can't get data from server. Please try later...";
             } finally {
                 this.isBusy = false;
             }

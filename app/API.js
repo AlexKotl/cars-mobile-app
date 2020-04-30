@@ -6,9 +6,9 @@ export default {
             paramsStr = '?' + query;
 
         }
-        
-        const url = "http://127.0.0.1:8000/" + action + paramsStr;
-        //const url = "http://api.dillishcars.com/" + action + paramsStr;
+
+        //const url = "http://127.0.0.1:8000/" + action + paramsStr;
+        const url = "https://api.dillishcars.com/" + action + paramsStr;
 
         console.log('Calling API:', url);
         try {
@@ -16,6 +16,7 @@ export default {
             const data = await res.json();
             return data;
         } catch(e) {
+            console.error(e);
             throw new Error("Failed to fetch " + url);
         }
 
