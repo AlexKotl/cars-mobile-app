@@ -6,7 +6,7 @@
         <ScrollView>
             <StackLayout class="car-details">
                 <GridLayout>
-                    <Carousel ref="myCarousel" debug="false" :height="galleryHight" width="100%"
+                    <Carousel ref="myCarousel" debug="false" :height="galleryHight+'px'" width="100%"
                         :items="details.images"
                         indicatorColor="#9b5504"
                         indicatorColorUnselected="#609b5504"
