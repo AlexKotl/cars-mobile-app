@@ -10,16 +10,15 @@
                 <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
-                <StackLayout v-if="!filters">
+                <StackLayout v-if="!filters.manufacturer && !filters.body">
                     <Label class="h1">Brands</Label>
                     <CarsFilters filter_type="manufacturer" :filters="getManufacturers" />
-                </StackLayout>
 
-                <StackLayout v-if="!filters">
                     <Label class="h1">Body Shapes</Label>
                     <CarsFilters filter_type="body" :filters="getBodies" />
-                </StackLayout>
 
+                    <Label class="h1">Latest Cars</Label>
+                </StackLayout>
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
@@ -45,7 +44,11 @@ import API from '../API';
 const Intl = require('intl');
 
 export default {
-    props: ["filters"],
+    props: {
+        filters: {
+            default: {}
+        }
+    },
     components: { CarDetails, CarsFilters },
     data() {
         return {
@@ -127,14 +130,9 @@ export default {
             await this.fetchAll();
         }
 
-        // init filters prop
-        if (!this.filters) {
-            this.filters = {};
-        }
-
         // filter cars from saved database
         if (Object.keys(this.filters).length == 0) {
-            this.filteredCars = this.getCars.slice(-10);
+            this.filteredCars = this.getCars.slice(-10).reverse();
         }
         else {
             const filtered = this.getCars.filter(item => {
@@ -147,7 +145,7 @@ export default {
                 }
                 return is_match;
             });
-            this.filteredCars = filtered.slice(0, 20); // return with pagination TODO
+            this.filteredCars = filtered; // return with pagination TODO
         }
 
         // fetch additional car data from API

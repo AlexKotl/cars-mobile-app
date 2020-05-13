@@ -76,7 +76,7 @@ export default {
     },
     computed: {
         galleryHight() {
-            return Math.round(platformModule.screen.mainScreen.widthPixels * 0.6);
+            return Math.round(platformModule.screen.mainScreen.widthPixels * 0.7);
         }
     },
     methods: {
