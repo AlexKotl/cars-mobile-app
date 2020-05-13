@@ -161,6 +161,7 @@ export default {
         background-color: #fff;
         border-radius: 8;
         font-size: 17;
+        margin-top: 14;
     }
 
     .cars-list-item .title {

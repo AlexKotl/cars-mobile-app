@@ -8,7 +8,7 @@
     "ios": "tns run ios --emulator"
   },
   "nativescript": {
-    "id": "org.nativescript.application",
+    "id": "org.dillishcars.application",
     "templateVersion": "v2",
     "tns-ios": {
       "version": "6.5.0"

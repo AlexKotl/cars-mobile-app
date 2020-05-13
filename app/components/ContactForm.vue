@@ -7,10 +7,10 @@
 
             <ActivityIndicator :busy="isBusy" v-if="isBusy" />
             <Label :text="errorMessage" v-if="errorMessage" class='error-message' textWrap="true" />
-            <Label :text="successMessage" v-if="successMessage" class='success-message' textWrap="true" />
 
             <Button text="Submit" v-if="!isBusy" @tap="submitLead()" />
         </StackLayout>
+        <Label :text="successMessage" v-if="successMessage" class='success-message' textWrap="true" />
     </StackLayout>
 </template>
 
