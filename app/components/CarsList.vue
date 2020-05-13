@@ -178,9 +178,8 @@ export default {
     }
 
     .cars-list-item {
-        margin-bottom: 20;
         background-color: #fff;
-        border-radius: 15;
+        border-radius: 8;
         font-size: 17;
     }
 
@@ -189,7 +188,7 @@ export default {
     }
 
     .cars-list-item Image {
-        border-radius: 5;
+        border-radius: 8;
         margin-right: 12;
     }
 
