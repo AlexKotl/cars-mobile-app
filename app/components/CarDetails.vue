@@ -4,7 +4,8 @@
         <ScrollView>
             <StackLayout class="car-details">
                 <GridLayout>
-                    <Carousel ref="myCarousel" debug="true" height="100%" width="100%" :items="details.images"
+                    <Carousel ref="myCarousel" debug="false" :height="galleryHight" width="100%"
+                        :items="details.images"
                         indicatorColor="#9b5504"
                         indicatorColorUnselected="#609b5504"
                         android:indicatorAnimation="swap">
@@ -56,6 +57,7 @@
 import API from '../API';
 import SimilarCars from './SimilarCars';
 import ContactForm from './ContactForm';
+const platformModule = require("tns-core-modules/platform");
 
 export default {
     props: ["id", "manufacturer", "model", "price"],
@@ -67,6 +69,11 @@ export default {
                 specs: [],
                 images: []
             }
+        }
+    },
+    computed: {
+        galleryHight() {
+            return Math.round(platformModule.screen.mainScreen.widthPixels * 0.6);
         }
     },
     methods: {

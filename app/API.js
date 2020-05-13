@@ -1,6 +1,6 @@
 export default {
-    //apiUrl: "https://api.dillishcars.com/",
-    apiUrl: "http://127.0.0.1:8000/",
+    apiUrl: "https://api.dillishcars.com/",
+    //apiUrl: "http://127.0.0.1:8000/",
 
     async get(action, params = {}) {
         let paramsStr = '';

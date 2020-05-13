@@ -37,10 +37,11 @@ export default {
         border-color: #ccc;
         padding: 5 12;
         margin: 5 3;
+        height: 38;
         border-radius: 17;
         background-color: black;
         color: white;
-        font-size: 14;
+        font-size: 12;
         font-weight: bold;
     }
 </style>
