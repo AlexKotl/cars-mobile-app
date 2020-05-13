@@ -10,13 +10,13 @@
                 <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
-                <StackLayout v-if="!filters || !filters.manufacturer">
+                <StackLayout v-if="!filters">
                     <Label class="h1">Brands</Label>
                     <CarsFilters filter_type="manufacturer" :filters="getManufacturers" />
                 </StackLayout>
 
-                <StackLayout v-if="!filters || !filters.body">
-                    <Label class="h1">Bodies</Label>
+                <StackLayout v-if="!filters">
+                    <Label class="h1">Body Shapes</Label>
                     <CarsFilters filter_type="body" :filters="getBodies" />
                 </StackLayout>
 
@@ -58,7 +58,14 @@ export default {
     computed: {
         ...mapGetters([ "getManufacturers", "getBodies", "getFilters", "getCars", "getCarsTimestamp" ]),
         pageTitle: function() {
-            return (this.filters && this.filters.manufacturer ? this.filters.manufacturer : "Dillish Cars");
+            let title = "Dillish Cars";
+            if (this.filters && this.filters.manufacturer) {
+                title = this.filters.manufacturer;
+            }
+            else if (this.filters && this.filters.body) {
+                title = this.filters.body;
+            }
+            return title;
         },
     },
     methods: {
@@ -131,7 +138,14 @@ export default {
         }
         else {
             const filtered = this.getCars.filter(item => {
-                return (!this.filters.manufacturer || this.filters.manufacturer === item.manufacturer);
+                let is_match = true;
+                if (this.filters.manufacturer && this.filters.manufacturer !== item.manufacturer) {
+                    is_match = false;
+                }
+                if (this.filters.body && this.filters.body !== item.body) {
+                    is_match = false;
+                }
+                return is_match;
             });
             this.filteredCars = filtered.slice(0, 20); // return with pagination TODO
         }
