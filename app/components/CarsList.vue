@@ -151,26 +151,6 @@ export default {
         margin-top: 20;
     }
 
-    .filters-list {
-        margin-bottom: 20;
-    }
-    .filter-button {
-        border-width: 1;
-        border-color: #ccc;
-        padding: 5 12;
-        margin: 5 3;
-        border-radius: 17;
-        background-color: black;
-        color: white;
-        font-size: 14;
-        font-weight: bold;
-    }
-    .filter-button.selected {
-        background-color: white;
-        color: black;
-
-    }
-
     .cars-list {
         vertical-align: top;
         font-size: 20;

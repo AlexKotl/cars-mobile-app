@@ -1,13 +1,14 @@
 <template>
     <StackLayout class="contact-form card">
-        <Label :text="errorMessage" v-if="errorMessage" class='error-message' textWrap="true" />
-        <Label :text="successMessage" v-if="successMessage" class='success-message' textWrap="true" />
-
         <StackLayout v-if="!isSent">
             <TextField hint="Your name" editable="true" v-model="name" />
             <TextField hint="Your phone or email" v-model="reply_to" />
             <TextView hint="Enter your message here..." v-model="message" />
+
             <ActivityIndicator :busy="isBusy" v-if="isBusy" />
+            <Label :text="errorMessage" v-if="errorMessage" class='error-message' textWrap="true" />
+            <Label :text="successMessage" v-if="successMessage" class='success-message' textWrap="true" />
+
             <Button text="Submit" v-if="!isBusy" @tap="submitLead()" />
         </StackLayout>
     </StackLayout>
