@@ -16,6 +16,7 @@
 
 <script>
 import API from '../API';
+const appSettings = require("tns-core-modules/application-settings");
 
 export default {
     props: ["id"],
@@ -30,10 +31,17 @@ export default {
             message: ""
         }
     },
+    mounted() {
+        this.name = appSettings.getString('form_name');
+        this.reply_to = appSettings.getString('form_reply_to');
+    },
     methods: {
         async submitLead() {
             this.isBusy = true;
             this.successMessage = this.errorMessage = false;
+
+            appSettings.setString("form_name", this.name);
+            appSettings.setString("form_reply_to", this.reply_to);
 
             try {
                 const res = await API.post("cars/" + this.id + "/contact", {
