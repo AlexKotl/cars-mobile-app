@@ -10,7 +10,16 @@
                 <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
-                <CarsFilters v-if="!filters || !filters.manufacturer" filter_type="manufacturer" :filters="getManufacturers" />
+                <StackLayout v-if="!filters || !filters.manufacturer">
+                    <Label class="h1">Brands</Label>
+                    <CarsFilters filter_type="manufacturer" :filters="getManufacturers" />
+                </StackLayout>
+
+                <StackLayout v-if="!filters || !filters.body">
+                    <Label class="h1">Bodies</Label>
+                    <CarsFilters filter_type="body" :filters="getBodies" />
+                </StackLayout>
+
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
@@ -47,7 +56,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers", "getFilters", "getCars", "getCarsTimestamp" ]),
+        ...mapGetters([ "getManufacturers", "getBodies", "getFilters", "getCars", "getCarsTimestamp" ]),
         pageTitle: function() {
             return (this.filters && this.filters.manufacturer ? this.filters.manufacturer : "Dillish Cars");
         },

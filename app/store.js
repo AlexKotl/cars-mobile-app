@@ -37,6 +37,11 @@ export default new Vuex.Store({
             filtered = filtered.filter((item, index) => filtered.indexOf(item) === index && item != '');
             return filtered.sort();
         },
+        getBodies(state) {
+            let filtered = state.cars.map(el => el.body);
+            filtered = filtered.filter((item, index) => filtered.indexOf(item) === index && item != '');
+            return filtered.sort();
+        },
         getCarsTimestamp(state) {
             return state.carsTimestamp;
         }

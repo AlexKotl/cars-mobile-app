@@ -9,6 +9,14 @@ ActionBar {
     color: #ffffff;
 }
 
+.h1 {
+    font-size: 24;
+    font-weight: bold;
+    margin-top: 20;
+    margin-bottom: 10;
+    color:white;
+}
+
 .card {
     border-radius: 10;
     background-color: white;

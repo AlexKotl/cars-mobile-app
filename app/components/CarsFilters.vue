@@ -2,7 +2,7 @@
     <WrapLayout>
         <Button v-for="filter in filters"
             :text="filter"
-            @tap="goTo({ manufacturer: filter })"
+            @tap="goTo({ [filter_type]: filter })"
             class="filter-button"
             :key="'filter_'+filter" />
     </WrapLayout>

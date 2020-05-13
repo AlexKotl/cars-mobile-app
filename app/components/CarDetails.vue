@@ -109,14 +109,6 @@ export default {
 </script>
 
 <style scoped>
-    .h1 {
-        font-size: 24;
-        font-weight: bold;
-        margin-top: 20;
-        margin-bottom: 10;
-        color:white;
-    }
-
     .car-details {
         vertical-align: top;
         padding: 10px;
