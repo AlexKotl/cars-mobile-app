@@ -13,13 +13,17 @@ import CarsList from './CarsList';
 
 export default {
     components: { CarsList },
-    props: [ "filters", "filter_type" ],
+    props: [ "filters", "filter_type", "manufacturer" ],
     data() {
         return {
         }
     },
     methods: {
         goTo(filters) {
+            if (filters.model) {
+                filters.manufacturer = this.manufacturer;
+            }
+
             this.$navigateTo(CarsList, {
                 props: {
                     filters: filters

@@ -10,7 +10,7 @@
                 <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
-                <StackLayout v-if="!filters.manufacturer && !filters.body">
+                <StackLayout v-if="!filters.manufacturer && !filters.body && !filters.model">
                     <Label class="h1">Brands</Label>
                     <CarsFilters filter_type="manufacturer" :filters="getManufacturers" />
 
@@ -19,6 +19,11 @@
 
                     <Label class="h1">Latest Cars</Label>
                 </StackLayout>
+
+                <CarsFilters v-if="filters.manufacturer && !filters.model"
+                    filter_type="model"
+                    :filters="getModels(filters.manufacturer)"
+                    :manufacturer="filters.manufacturer" />
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
@@ -59,10 +64,13 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers", "getBodies", "getFilters", "getCars", "getCarsTimestamp" ]),
+        ...mapGetters([ "getManufacturers", "getBodies", "getModels", "getFilters", "getCars", "getCarsTimestamp" ]),
         pageTitle: function() {
             let title = "Dillish Cars";
-            if (this.filters && this.filters.manufacturer) {
+            if (this.filters && this.filters.model) {
+                title = this.filters.manufacturer + ' ' + this.filters.model;
+            }
+            else if (this.filters && this.filters.manufacturer) {
                 title = this.filters.manufacturer;
             }
             else if (this.filters && this.filters.body) {
@@ -72,7 +80,7 @@ export default {
         },
     },
     methods: {
-        ...mapMutations([ "updateFilters", "updateCars" ]),
+        ...mapMutations([ "updateCars" ]),
         formatNumber(number) {
             if (number > 0) {
                 return new Intl.NumberFormat().format(number);
@@ -141,6 +149,9 @@ export default {
                     is_match = false;
                 }
                 if (this.filters.body && this.filters.body !== item.body) {
+                    is_match = false;
+                }
+                if (this.filters.model && this.filters.model !== item.model) {
                     is_match = false;
                 }
                 return is_match;
