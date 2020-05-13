@@ -7,7 +7,7 @@
             <TextField hint="Your name" editable="true" v-model="name" />
             <TextField hint="Your phone or email" v-model="reply_to" />
             <TextView hint="Enter your message here..." v-model="message" />
-            <ActivityIndicator :busy="isBusy" />
+            <ActivityIndicator :busy="isBusy" v-if="isBusy" />
             <Button text="Submit" v-if="!isBusy" @tap="submitLead()" />
         </StackLayout>
     </StackLayout>

@@ -5,9 +5,9 @@
             <StackLayout class="cars-list">
                 <!-- Loading info -->
                 <Label v-if="errorMessage" :text="errorMessage" textWrap="true" class="error-message" />
-                
+
                 <Button v-if="errorMessage" text="Retry" @tap="fetchAll()" class="retry-button" />
-                <ActivityIndicator :busy="isBusy" />
+                <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
                 <CarsFilters v-if="!filters || !filters.manufacturer" filter_type="manufacturer" :filters="getManufacturers" />

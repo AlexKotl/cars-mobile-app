@@ -1,6 +1,8 @@
 <template>
     <Page>
-        <ActionBar :title="manufacturer + ' ' + model"/>
+        <ActionBar :title="manufacturer + ' ' + model">
+            <NavigationButton text="Go back" android.systemIcon="ic_menu_back" @tap="$navigateBack" />
+        </ActionBar>
         <ScrollView>
             <StackLayout class="car-details">
                 <GridLayout>
@@ -18,9 +20,9 @@
                 </GridLayout>
 
 
-                <Label :text="manufacturer + ' ' + model + ' Specifications'" class="h1"></Label>
+                <Label :text="manufacturer + ' ' + model + ''" class="h1"></Label>
 
-                <ActivityIndicator :busy="isBusy" />
+                <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
 
                 <StackLayout class="">
