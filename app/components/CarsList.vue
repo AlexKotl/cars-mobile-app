@@ -10,7 +10,20 @@
                 <ActivityIndicator :busy="isBusy" v-if="isBusy" />
 
                 <!-- Filters -->
-                <CarsFilters v-if="!filters || !filters.manufacturer" filter_type="manufacturer" :filters="getManufacturers" />
+                <StackLayout v-if="!filters.manufacturer && !filters.body && !filters.model">
+                    <Label class="h1">Brands</Label>
+                    <CarsFilters filter_type="manufacturer" :filters="getManufacturers" />
+
+                    <Label class="h1">Body Shapes</Label>
+                    <CarsFilters filter_type="body" :filters="getBodies" />
+
+                    <Label class="h1">Latest Cars</Label>
+                </StackLayout>
+
+                <CarsFilters v-if="filters.manufacturer && !filters.model"
+                    filter_type="model"
+                    :filters="getModels(filters.manufacturer)"
+                    :manufacturer="filters.manufacturer" />
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
@@ -36,7 +49,11 @@ import API from '../API';
 const Intl = require('intl');
 
 export default {
-    props: ["filters"],
+    props: {
+        filters: {
+            default: {}
+        }
+    },
     components: { CarDetails, CarsFilters },
     data() {
         return {
@@ -47,13 +64,23 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([ "getManufacturers", "getFilters", "getCars", "getCarsTimestamp" ]),
+        ...mapGetters([ "getManufacturers", "getBodies", "getModels", "getFilters", "getCars", "getCarsTimestamp" ]),
         pageTitle: function() {
-            return (this.filters && this.filters.manufacturer ? this.filters.manufacturer : "Dillish Cars");
+            let title = "Dillish Cars";
+            if (this.filters && this.filters.model) {
+                title = this.filters.manufacturer + ' ' + this.filters.model;
+            }
+            else if (this.filters && this.filters.manufacturer) {
+                title = this.filters.manufacturer;
+            }
+            else if (this.filters && this.filters.body) {
+                title = this.filters.body;
+            }
+            return title;
         },
     },
     methods: {
-        ...mapMutations([ "updateFilters", "updateCars" ]),
+        ...mapMutations([ "updateCars" ]),
         formatNumber(number) {
             if (number > 0) {
                 return new Intl.NumberFormat().format(number);
@@ -111,20 +138,25 @@ export default {
             await this.fetchAll();
         }
 
-        // init filters prop
-        if (!this.filters) {
-            this.filters = {};
-        }
-
         // filter cars from saved database
         if (Object.keys(this.filters).length == 0) {
-            this.filteredCars = this.getCars.slice(-10);
+            this.filteredCars = this.getCars.slice(-10).reverse();
         }
         else {
             const filtered = this.getCars.filter(item => {
-                return (!this.filters.manufacturer || this.filters.manufacturer === item.manufacturer);
+                let is_match = true;
+                if (this.filters.manufacturer && this.filters.manufacturer !== item.manufacturer) {
+                    is_match = false;
+                }
+                if (this.filters.body && this.filters.body !== item.body) {
+                    is_match = false;
+                }
+                if (this.filters.model && this.filters.model !== item.model) {
+                    is_match = false;
+                }
+                return is_match;
             });
-            this.filteredCars = filtered.slice(0, 20); // return with pagination TODO
+            this.filteredCars = filtered; // return with pagination TODO
         }
 
         // fetch additional car data from API
