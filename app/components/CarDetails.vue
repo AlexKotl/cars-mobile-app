@@ -60,6 +60,7 @@ import API from '../API';
 import SimilarCars from './SimilarCars';
 import ContactForm from './ContactForm';
 const platformModule = require("tns-core-modules/platform");
+const Intl = require('intl');
 
 export default {
     props: ["id", "manufacturer", "model", "price"],
@@ -93,12 +94,14 @@ export default {
     async created() {
         const res = await API.get('cars/' + this.id);
         this.details = res.data;
+        this.details.price = 'N$ ' + new Intl.NumberFormat().format(this.details.price);
+        this.details.mileage = new Intl.NumberFormat().format(this.details.mileage) + ' km';
         this.isBusy = false;
     },
     watch: {
+        // watch for gallery images data load
         async 'details.images'(to) {
             await this.$nextTick();
-            console.log('DATA UPDATED')
             this.$refs.myCarousel.nativeView.refresh();
         },
     }

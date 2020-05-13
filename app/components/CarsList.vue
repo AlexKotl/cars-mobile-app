@@ -19,8 +19,8 @@
                     <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
                         <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
                         <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
-                        <Label :text="car.mileage ? car.mileage + ' km' : ''" row="1" col="1" />
-                        <Label :text="'N$' + car.price" row="2" col="1" />
+                        <Label :text="car.mileage ? formatNumber(car.mileage) + ' km' : ''" row="1" col="1" />
+                        <Label :text="'N$ ' + formatNumber(car.price)" row="2" col="1" />
                     </GridLayout>
                 </StackLayout>
             </StackLayout>
@@ -33,6 +33,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CarDetails from './CarDetails';
 import CarsFilters from './CarsFilters';
 import API from '../API';
+const Intl = require('intl');
 
 export default {
     props: ["filters"],
@@ -53,6 +54,14 @@ export default {
     },
     methods: {
         ...mapMutations([ "updateFilters", "updateCars" ]),
+        formatNumber(number) {
+            if (number > 0) {
+                return new Intl.NumberFormat().format(number);
+            }
+            else {
+                return number;
+            }
+        },
         goToDetails(car) {
             this.$navigateTo(CarDetails, {
                 props: {

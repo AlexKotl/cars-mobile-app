@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@vue/devtools": "^5.3.3",
+    "intl": "^1.2.5",
     "nativescript-carousel": "^6.1.1",
     "nativescript-socketio": "^3.3.1",
     "nativescript-toasty": "^3.0.0-alpha.2",
