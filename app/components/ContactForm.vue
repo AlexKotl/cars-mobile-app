@@ -32,8 +32,8 @@ export default {
         }
     },
     mounted() {
-        this.name = appSettings.getString('form_name');
-        this.reply_to = appSettings.getString('form_reply_to');
+        this.name = appSettings.getString('form_name') || '';
+        this.reply_to = appSettings.getString('form_reply_to') || '';
     },
     methods: {
         async submitLead() {
