@@ -1,6 +1,8 @@
 <template>
     <Page>
-        <ActionBar :title="pageTitle"/>
+        <ActionBar :title="pageTitle">
+            <NavigationButton v-if="filters.manufacturer || filters.body || filters.model" text="Go back" android.systemIcon="ic_menu_back" @tap="$navigateBack" />
+        </ActionBar>
         <ScrollView>
             <StackLayout class="cars-list">
                 <!-- Loading info -->
@@ -37,7 +39,7 @@
                     </GridLayout>
                 </StackLayout>
 
-                <Button text="Load more" @tap="showMore()" v-if="displayCars < filteredCars" class="load-more-button" />
+                <Button text="Load more" @tap="showMore()" v-if="displayCars < filteredCars && filteredCars > 0" class="load-more-button" />
             </StackLayout>
         </ScrollView>
     </Page>
