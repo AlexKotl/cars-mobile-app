@@ -195,16 +195,18 @@ export default {
     .cars-list-item {
         background-color: #fff;
         border-radius: 8;
-        font-size: 17;
+        font-size: 15;
         margin-top: 14;
     }
 
     .cars-list-item .title {
         font-weight: bold;
+        font-size: 17;
     }
 
     .cars-list-item Image {
-        border-radius: 8;
+        border-top-left-radius: 8;
+        border-bottom-left-radius: 8;
         margin-right: 12;
     }
 
