@@ -18,7 +18,7 @@
                         </CarouselItem>
                     </Carousel>
                 </GridLayout>
-
+                <Like :id="id" :count="details.likes" />
 
                 <Label :text="manufacturer + ' ' + model + ''" class="h1"></Label>
 
@@ -59,12 +59,13 @@
 import API from '../API';
 import SimilarCars from './SimilarCars';
 import ContactForm from './ContactForm';
+import Like from './Like';
 const platformModule = require("tns-core-modules/platform");
 const Intl = require('intl');
 
 export default {
     props: ["id", "manufacturer", "model", "price"],
-    components: { SimilarCars, ContactForm },
+    components: { SimilarCars, ContactForm, Like },
     data() {
         return {
             isBusy: true,

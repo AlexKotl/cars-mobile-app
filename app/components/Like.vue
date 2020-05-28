@@ -1,8 +1,9 @@
 <template>
-    <StackLayout>
+    <WrapLayout>
         <Image v-if="getLikes.indexOf(id) === -1" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
         <Image v-else src="~/assets/images/like.png" ref="icon" width="26" height="26" @tap="like(false)" />
-    </StackLayout>
+        <Label :text="count" class="likes-count" />
+    </WrapLayout>
 </template>
 
 <script>
@@ -10,7 +11,7 @@
 import { mapMutations, mapGetters } from 'vuex';
 
 export default {
-    props: [ "id" ],
+    props: [ "id", "count" ],
     computed: {
         ...mapGetters([ "getLikes" ]),
     },
@@ -24,6 +25,13 @@ export default {
         like(is_like) {
 
             this.updateLike(this.id);
+
+            if (is_like) {
+                this.count = parseInt(this.count) + 1;
+            }
+            else {
+                this.count = parseInt(this.count) - 1;
+            }
 
             // animation
             let icon = this.$refs.icon.nativeView;
@@ -58,5 +66,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.likes-count {
+    font-size: 15;
+    font-weight: bold;
+    margin-left: 5;
+}
 </style>
