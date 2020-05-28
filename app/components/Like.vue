@@ -1,6 +1,7 @@
 <template>
     <WrapLayout>
-        <Image v-if="getLikes.indexOf(id) === -1" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
+        <Image v-if="getLikes.indexOf(id) === -1 && colors === 'red'" src="~/assets/images/like-o-red.png" ref="icon" width="26" height="26" @tap="like(true)" />
+        <Image v-else-if="getLikes.indexOf(id) === -1" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
         <Image v-else src="~/assets/images/like.png" ref="icon" width="26" height="26" @tap="like(false)" />
         <Label :text="count" class="likes-count" />
     </WrapLayout>
@@ -11,7 +12,7 @@
 import { mapMutations, mapGetters } from 'vuex';
 
 export default {
-    props: [ "id", "count" ],
+    props: [ "id", "count", "colors" ],
     computed: {
         ...mapGetters([ "getLikes" ]),
     },

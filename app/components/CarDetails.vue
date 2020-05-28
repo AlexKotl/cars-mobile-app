@@ -18,7 +18,8 @@
                         </CarouselItem>
                     </Carousel>
                 </GridLayout>
-                <Like :id="id" :count="details.likes" />
+
+                <Like :id="id" :count="details.likes" colors="red" class="like-button" />
 
                 <Label :text="manufacturer + ' ' + model + ''" class="h1"></Label>
 
@@ -117,6 +118,10 @@ export default {
 
     .car-details-specs {
         margin-bottom: 4;
+    }
+
+    .like-button {
+        margin: 10 0;
     }
 
     .spec-name {
