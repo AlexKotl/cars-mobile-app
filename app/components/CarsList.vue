@@ -34,7 +34,7 @@
                         <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
                         <Label :text="car.mileage ? formatNumber(car.mileage) + ' km' : ''" row="1" col="1" />
                         <Label :text="'N$ ' + formatNumber(car.price)" row="2" col="1" />
-                        <Like row="2" col="2" />
+                        <Like :id="car.id" row="2" col="2" />
                     </GridLayout>
                 </StackLayout>
             </StackLayout>

@@ -1,17 +1,18 @@
 <template>
     <StackLayout>
-        <Image v-if="!liked" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
+        <Image v-if="getLikes.indexOf(id) === -1" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
         <Image v-else src="~/assets/images/like.png" ref="icon" width="26" height="26" @tap="like(false)" />
     </StackLayout>
 </template>
 
 <script>
+
+import { mapMutations, mapGetters } from 'vuex';
+
 export default {
-    props: {
-        id: {},
-        liked: {
-            default: false
-        }
+    props: [ "id" ],
+    computed: {
+        ...mapGetters([ "getLikes" ]),
     },
     data: function() {
         return {
@@ -19,10 +20,12 @@ export default {
         }
     },
     methods: {
+        ...mapMutations([ "updateLike" ]),
         like(is_like) {
 
-            this.liked = !this.liked;
+            this.updateLike(this.id);
 
+            // animation
             let icon = this.$refs.icon.nativeView;
             icon.animate({
                 scale: {

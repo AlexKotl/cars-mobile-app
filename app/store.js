@@ -8,13 +8,23 @@ export default new Vuex.Store({
         cars: [],
         carsTimestamp: false,
         filteredCars: [],
-        filters: {}
+        filters: {},
+        likes: [],
     },
     mutations: {
         updateCars(state, cars) {
             state.cars = cars;
             state.carsTimestamp = new Date();
         },
+        updateLike(state, car_id) {
+            const index = state.likes.indexOf(car_id);
+            if (index === -1) {
+                state.likes.push(car_id);
+            }
+            else {
+                state.likes.splice(index, 1);
+            }
+        }
     },
     actions: {
 
@@ -50,6 +60,9 @@ export default new Vuex.Store({
         },
         getCarsTimestamp(state) {
             return state.carsTimestamp;
-        }
+        },
+        getLikes(state) {
+            return state.likes;
+        },
     }
 });
