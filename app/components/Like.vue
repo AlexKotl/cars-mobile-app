@@ -3,7 +3,7 @@
         <Image v-if="getLikes.indexOf(id) === -1 && colors === 'red'" src="~/assets/images/like-o-red.png" ref="icon" width="26" height="26" @tap="like(true)" />
         <Image v-else-if="getLikes.indexOf(id) === -1" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
         <Image v-else src="~/assets/images/like.png" ref="icon" width="26" height="26" @tap="like(false)" />
-        <Label :text="count" class="likes-count" />
+        <Label :text="likeCount" class="likes-count" />
     </WrapLayout>
 </template>
 
@@ -16,6 +16,9 @@ export default {
     props: [ "id", "count", "colors" ],
     computed: {
         ...mapGetters([ "getLikes" ]),
+        likeCount() {
+            return this.count == 0 ? '' : this.count;
+        }
     },
     data: function() {
         return {
