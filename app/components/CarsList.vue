@@ -27,7 +27,7 @@
 
                 <!-- Stock -->
                 <StackLayout class="card cars-list-item"
-                    v-for="car in filteredCars"
+                    v-for="car in displayCars"
                     :key="car.manufacturer+car.model+car.id">
                     <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
                         <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
@@ -36,6 +36,8 @@
                         <Label :text="'N$ ' + formatNumber(car.price)" row="2" col="1" />
                     </GridLayout>
                 </StackLayout>
+
+                <Button text="Load more" @tap="showMore()" v-if="displayCars < filteredCars" class="load-more-button" />
             </StackLayout>
         </ScrollView>
     </Page>
@@ -59,7 +61,8 @@ export default {
         return {
             errorMessage: false,
             isBusy: false,
-            filteredCars: [],
+            filteredCars: [], // all cars that match current search
+            displayCars: [], // cars to render on screen
             carsData: {} // additional cars data that pulled from API
         }
     },
@@ -113,26 +116,13 @@ export default {
             }
 
         },
-        completeFilteredCars(state, data) {
-            let additional = {};
-            data.forEach(item => {
-                additional[item.id] = item;
-            });
-
-            const completed = state.filteredCars.map(item => {
-                if (additional[item.id]) {
-                    item.images = additional[item.id].images;
-                    item.mileage = additional[item.id].mileage;
-                }
-
-                return item;
-            });
-
-            state.filteredCars = completed;
-        }
+        showMore() {
+            const loaded = this.displayCars.length;
+            this.displayCars = this.filteredCars.slice(0, loaded + 20);
+        },
 
     },
-    async created() {
+    async mounted() {
         // fetch whole cars database
         if (!this.getCarsTimestamp) {
             await this.fetchAll();
@@ -156,7 +146,7 @@ export default {
                 }
                 return is_match;
             });
-            this.filteredCars = filtered; // return with pagination TODO
+            this.filteredCars = filtered;
         }
 
         // fetch additional car data from API
@@ -175,6 +165,8 @@ export default {
             }
             return item;
         });
+
+        this.displayCars = this.filteredCars.slice(0, 20);
 
     }
 }
@@ -212,6 +204,10 @@ export default {
     .cars-list-item Image {
         border-radius: 8;
         margin-right: 12;
+    }
+
+    .load-more-button {
+        margin: 20 0;
     }
 
 
