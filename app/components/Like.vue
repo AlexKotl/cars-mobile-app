@@ -1,15 +1,29 @@
 <template>
     <StackLayout>
-        <Image src="~/assets/images/like-o.png" ref="icon" width="32" height="32" @tap="like" />
+        <Image v-if="!liked" src="~/assets/images/like-o.png" ref="icon" width="26" height="26" @tap="like(true)" />
+        <Image v-else src="~/assets/images/like.png" ref="icon" width="26" height="26" @tap="like(false)" />
     </StackLayout>
 </template>
 
 <script>
 export default {
-    props: [ "id" ],
+    props: {
+        id: {},
+        liked: {
+            default: false
+        }
+    },
+    data: function() {
+        return {
+
+        }
+    },
     methods: {
-        like() {
-            let icon = this.$refs.icon.nativeView
+        like(is_like) {
+
+            this.liked = !this.liked;
+
+            let icon = this.$refs.icon.nativeView;
             icon.animate({
                 scale: {
                     x: 0.6,
