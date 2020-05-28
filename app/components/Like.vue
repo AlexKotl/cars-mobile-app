@@ -10,6 +10,7 @@
 <script>
 
 import { mapMutations, mapGetters } from 'vuex';
+import API from '../API';
 
 export default {
     props: [ "id", "count", "colors" ],
@@ -29,9 +30,11 @@ export default {
 
             if (is_like) {
                 this.count = parseInt(this.count) + 1;
+                API.post('cars/' + this.id + '/like');
             }
             else {
                 this.count = parseInt(this.count) - 1;
+                API.post('cars/' + this.id + '/dislike');
             }
 
             // animation
