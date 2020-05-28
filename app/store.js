@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+const appSettings = require("tns-core-modules/application-settings");
 
 Vue.use(Vuex);
 
@@ -16,6 +17,9 @@ export default new Vuex.Store({
             state.cars = cars;
             state.carsTimestamp = new Date();
         },
+        updateLikes(state, likes) {
+            state.likes = likes;
+        },
         updateLike(state, car_id) {
             const index = state.likes.indexOf(car_id);
             if (index === -1) {
@@ -24,10 +28,19 @@ export default new Vuex.Store({
             else {
                 state.likes.splice(index, 1);
             }
+            // save to local database
+            appSettings.setString('likes', JSON.stringify(state.likes));
         }
     },
     actions: {
-
+        // load likes from local database when loading app
+        initLikes({ commit, getters, dispatch, state }) {
+            try {
+                const likes = JSON.parse(appSettings.getString('likes'));
+                commit('updateLikes', likes);
+            }
+            finally {}
+        },
     },
     getters: {
         getCars(state) {

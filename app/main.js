@@ -11,6 +11,7 @@ if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)
 }
 import store from './store'
+store.dispatch("initLikes");
 Vue.prototype.$store = store; // fix store error in Preview app
 
 // Prints Vue logs when --env.production is *NOT* set while building
