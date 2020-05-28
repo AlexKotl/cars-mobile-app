@@ -31,11 +31,12 @@
                 <StackLayout class="card cars-list-item"
                     v-for="car in displayCars"
                     :key="car.manufacturer+car.model+car.id">
-                    <GridLayout columns="2*, 3*" rows="auto, auto, auto" @tap="goToDetails(car)">
-                        <Image :src="car.images ? car.images[0] : ''" stretch="aspectFill" row="0" rowSpan="3" col="0" />
+                    <GridLayout columns="2*, 2*, 1*" rows="auto, auto, auto">
+                        <Image :src="car.images ? car.images[0] : ''" @tap="goToDetails(car)" stretch="aspectFill" row="0" rowSpan="3" col="0" />
                         <Label :text="car.manufacturer + ' ' + car.model" row="0" col="1" class="title" />
                         <Label :text="car.mileage ? formatNumber(car.mileage) + ' km' : ''" row="1" col="1" />
                         <Label :text="'N$ ' + formatNumber(car.price)" row="2" col="1" />
+                        <Like :id="car.id" :count="car.likes" row="2" col="2" />
                     </GridLayout>
                 </StackLayout>
 
@@ -49,6 +50,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CarDetails from './CarDetails';
 import CarsFilters from './CarsFilters';
+import Like from './Like';
 import API from '../API';
 const Intl = require('intl');
 
@@ -58,7 +60,7 @@ export default {
             default: {}
         }
     },
-    components: { CarDetails, CarsFilters },
+    components: { CarDetails, CarsFilters, Like },
     data() {
         return {
             errorMessage: false,
@@ -164,6 +166,7 @@ export default {
             if (additional[item.id]) {
                 item.images = additional[item.id].images;
                 item.mileage = additional[item.id].mileage;
+                item.likes = additional[item.id].likes;
             }
             return item;
         });
